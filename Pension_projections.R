@@ -104,7 +104,7 @@ ret=prop*fund_return[,1]+prop*fund_return[,2]
     ret=prop*fund_return[,1]+prop*fund_return[,2]
     }else{ret=fund_return[,z]}}
 }
-#-------------------------------pension plan projection------------------------
+#-------------------------------pension plan model----------------------------
 AL=matrix(0,nrow=150,ncol=max(plan[,1])) #AL,NC,Pen for each inf
 NC=matrix(0,nrow=150,ncol=max(plan[,1]))
 Pen=matrix(0,nrow=150,ncol=max(plan[,1]))
@@ -124,7 +124,7 @@ NPA=60
 benefit=300# per yr pension for each yr of service
 int=0.06 # discount rate
 
-#---------------------------AL,NC for each member inf-------------------------
+#------------------------AL,NC for each member inf in valuation--------------------
 fact=matrix(0,nrow=150,ncol=9)
 colnames(fact)=c('t','age','px','qx','lx','disc','Dx','ben','sy')                           
 for (i in 1 : 150){
@@ -240,7 +240,7 @@ if(i==1){
 
 }
 
-#------------------------------pension plan valuation---------------------------
+#------------------------------pension plan projection---------------------------
 AL_tt=rep(0,110)
 NC_tt=rep(0,110)
 Pen_tt=rep(0,110)
