@@ -5,7 +5,7 @@ library(MASS)
 ctrl_rand_mort=1# mortality experience: 1 for random mort exp, 0 for deterministic mort exp 
 ass_mort=1 # assumed mortality: 1 for improved table, 0 for base CPM table
 scale=100 # increase # of member(1 or 100)
-ctrl_opengroup=0 #0 for close group, 1 for open group
+ctrl_opengroup=1 #0 for close group, 1 for open group
 ctrl_sample_path=0# 1 for sample path, 0 for simulation
 ctrl_fixed_fund_return=0  #in simulation:1 for fixed fund return when value randomness in deaths, 
                           #0 otherwise
@@ -19,14 +19,14 @@ ctrl_corr=1# 0 for w/o correlation, 1 for w/ correlation in multi normal dist
 mean=c(0.05,0.15)
 if(ctrl_corr==0){
 sigma=matrix(c(0.15,0,0,0.3),2,2)
-}else{sigma=matrix(c(00.15,-0.1,-0.1,0.3),2,2)}
+}else{sigma=matrix(c(0.15,-0.1,-0.1,0.3),2,2)}
 prop=0.5
 #update the file paths when reading the table
 if(ctrl_source_fundret==1&&ctrl_fixed_fund_return==0){
 fund_return=read.csv("C:\\F\\pension_projection\\Rt_unsort_close_lowvar_dist_total_w cor.csv",header = T)
 }
 if(ctrl_fixed_fund_return==1){
-  fund_return=read.csv("C:\\F\\pension_projection\Rt_close_lowvar_dist_total_w cor.csv",header = T)}
+  fund_return=read.csv("C:\\F\\pension_projection\\Rt_close_lowvar_dist_total_w cor.csv",header = T)}
 #-----------------------------------plot feature---------------------------------
 max_yr=90
 title=if(ctrl_sample_path==0&&ctrl_fixed_fund_return==1){"fund returns: deterministic returns"
@@ -293,15 +293,15 @@ pp=as.data.frame(Pensproj)
 
 p1=ggplot(pp[pp$yr<max_yr,],aes(yr,ALt))+geom_line(aes(colour="ALt"),size=0.3)+geom_line(aes(y=Ft,colour="Ft"),size=0.3)+
   scale_x_continuous(breaks=seq(0,100,10))+scale_colour_manual(name="",values = c("ALt"="red","Ft"="black"))+
-  labs(title=title,subtitle=subtitle,x="years",y="ALt/Ft")+theme_bw()+
-  theme(legend.position = c(0.9,0.15),legend.background = element_blank(),legend.title = element_text(size = 0.3),
+  labs(title=title,subtitle=subtitle,x="times",y="ALt/Ft")+theme_bw()+
+  theme(legend.position = c(0.9,0.8),legend.background = element_blank(),legend.title = element_text(size = 0.3),
         plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12))#+
   #scale_y_continuous(breaks=seq(-100000*scale,900000*scale,200000*scale),limits=c(-100000*scale,900000*scale))
 p1
 p2=ggplot(pp[pp$yr<max_yr,],aes(yr,NCt))+geom_line(size=0.3)+
   scale_x_continuous(breaks=seq(0,100,10))+
-  labs(x="years",y="NCt")+theme_bw()+
+  labs(x="times",y="NCt")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12),
         axis.title =element_text(size=12))#+
@@ -309,14 +309,14 @@ p2=ggplot(pp[pp$yr<max_yr,],aes(yr,NCt))+geom_line(size=0.3)+
 p2
 p3=ggplot(pp[pp$yr<=max_yr,],aes(yr,Ct))+geom_line(size=0.3)+
   scale_x_continuous(breaks=seq(0,100,10))+
-  labs(x="years",y="Ct")+theme_bw()+
+  labs(x="times",y="Ct")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12),
         axis.title =element_text(size=12))#+
   #scale_y_continuous(breaks=seq(-2000000,2500000,1000000),limits=c(-2000000,2500000))
 p3
 p4=ggplot(pp[pp$yr<=max_yr,],aes(yr,Bt))+geom_line(size=0.3)+
-  scale_x_continuous(breaks=seq(0,100,10))+labs(x="years",y="Bt")+theme_bw()+
+  scale_x_continuous(breaks=seq(0,100,10))+labs(x="times",y="Bt")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12),
         axis.title =element_text(size=12))#+
@@ -326,7 +326,7 @@ p4
 
 p5=ggplot(pp[pp$yr<=(max_yr-1),],aes(yr,FRt))+geom_line(size=0.3)+
   scale_x_continuous(breaks=seq(0,90,10))+
-  labs(x="years",y="FRt")+theme_bw()+
+  labs(x="times",y="FRt")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12),
         axis.title =element_text(size=12))
@@ -334,19 +334,18 @@ p5
 
 p6=ggplot(pp[pp$yr<=max_yr,],aes(yr,Rt))+geom_line()+
   scale_x_continuous(breaks=seq(0,90,10))+
-  labs(x="years",y="Rt")+theme_bw()+
+  labs(x="times",y="Rt")+theme_bw()+
   theme(axis.title =element_text(size=12))
 p6
 
 p7=ggplot(pp[pp$yr<=70,],aes(yr,FRt))+geom_line(size=0.3)+
   scale_x_continuous(breaks=seq(0,90,10))+
-  labs(x="years",y="FRt")+theme_bw()+
+  labs(x="times",y="FRt")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12),
         axis.title =element_text(size=12))+
-  scale_y_continuous(breaks=seq(0,3.4,0.2),limits=c(0,3.4))
+  scale_y_continuous(breaks=seq(0,3.4,0.4),limits=c(0,3.4))
 p7
-
 
 p1
 ggsave(p1,file=pdfname("AL_FV"),width = 7,height = 3.5)
@@ -362,7 +361,12 @@ p6
 ggsave(p6,file=pdfname("Rt"),width = 7,height = 3.5)
 p7
 if(ctrl_opengroup==0){
-ggsave(p7,file=pdfname("FRt_sel"),width = 7,height = 3.5)}
+ggsave(p7,file=pdfname("FRt_sel"),width = 7,height = 3.5)
+  comb=p1+p2+p3+p4+p5+p7+plot_layout(ncol = 2)
+  ggsave(comb,filename = pdfname("comb"),width=12,height = 9)
+  }else{
+comb=p1+p2+p3+p4+p5+plot_layout(ncol = 2)
+ggsave(comb,filename = pdfname("comb"),width=12,height = 9)}
 
 #-----------------------------------Fan plot------------------------------------
 }else{Ct_dist_sort=t(apply(Ct_dist[1:91,],1,sort,decreasing=F))
@@ -393,7 +397,7 @@ write.csv(FR_range_final,file=csvname("FR_range"),row.names = FALSE)
 
 d1=ggplot(Ct_final[Ct_final$yr<=max_yr,],aes(yr,x500))+geom_line(size=0.1)+geom_line(aes(y=x2500),size=0.1)+
   geom_line(aes(y=x5000),size=0.1)+geom_line(aes(y=x7500),size=0.1)+
-  geom_line(aes(y=x9500),size=0.1)+labs(x="years",y="Ct")+theme_bw()+
+  geom_line(aes(y=x9500),size=0.1)+labs(x="times",y="Ct")+theme_bw()+
   theme(plot.title=element_text(size=12),
                 plot.subtitle = element_text(size = 12))+
   scale_y_continuous(breaks=seq(-300000*scale,100000*scale,100000*scale),limits=c(-300000*scale,100000*scale))+
@@ -401,7 +405,7 @@ d1=ggplot(Ct_final[Ct_final$yr<=max_yr,],aes(yr,x500))+geom_line(size=0.1)+geom_
 d1
 d2=ggplot(Ft_final[Ft_final$yr<=max_yr,],aes(yr,x500))+geom_line(size=0.1)+geom_line(aes(y=x2500),size=0.1)+
   geom_line(aes(y=x5000),size=0.1)+geom_line(aes(y=x7500),size=0.1)+
-  geom_line(aes(y=x9500),size=0.1)+labs(title=title,subtitle=subtitle,x="years",y="Ft")+theme_bw()+
+  geom_line(aes(y=x9500),size=0.1)+labs(title=title,subtitle=subtitle,x="times",y="Ft")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12))+
   scale_y_continuous(breaks=seq(-200000*scale,3000000*scale,1000000*scale),limits=c(-200000*scale,3000000*scale))+
@@ -409,7 +413,7 @@ d2=ggplot(Ft_final[Ft_final$yr<=max_yr,],aes(yr,x500))+geom_line(size=0.1)+geom_
 d2
 d3=ggplot(FR_final[FR_final$yr<=60,],aes(yr,x500))+geom_line(size=0.1)+geom_line(aes(y=x2500),size=0.1)+
   geom_line(aes(y=x5000),size=0.1)+geom_line(aes(y=x7500),size=0.1)+
-  geom_line(aes(y=x9500),size=0.1)+labs(x="years",y="FRt")+theme_bw()+
+  geom_line(aes(y=x9500),size=0.1)+labs(x="times",y="FRt")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12))+
   scale_y_continuous(breaks=seq(0.8,3,0.2),limits=c(0.8,3))+
@@ -417,7 +421,7 @@ d3=ggplot(FR_final[FR_final$yr<=60,],aes(yr,x500))+geom_line(size=0.1)+geom_line
 d3
 d4=ggplot(NC_final[NC_final$yr<=35,],aes(yr,x500))+geom_line(size=0.1)+geom_line(aes(y=x2500),size=0.1)+
   geom_line(aes(y=x5000),size=0.1)+geom_line(aes(y=x7500),size=0.1)+
-  geom_line(aes(y=x9500),size=0.1)+labs(x="years",y="NCt")+theme_bw()+
+  geom_line(aes(y=x9500),size=0.1)+labs(x="times",y="NCt")+theme_bw()+
   theme(plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12))+
   scale_y_continuous(breaks=seq(0,20000*scale,5000*scale),limits=c(0,20000*scale))+
@@ -451,40 +455,47 @@ if(ctrl_fixed_fund_return==0&&ctrl_rand_mort==1){
 
 
 #------------------------ actual vs assumed # of members in force -------------------
-comp=cbind(Pensproj[,1],inf_tt,inf_ass_tt)
+title="mortality assumption: CPM2014 improvement table"
+
+subtitle="mortality experience: random binomial variables"
+
+comp=cbind(Pensproj[,1],inf_tt[1:110],inf_ass_tt[1:110])
 colnames(comp)=c('yr','inf','inf_ass')
 comp=as.data.frame(comp)
-g1=ggplot(comp[comp$yr<=90,],aes(yr,inf))+geom_line(aes(colour="inf_rnd"))+geom_line(aes(y=inf_ass,colour="inf_ass"))+
-  scale_x_continuous(breaks=seq(0,90,10))+scale_colour_manual(name="",values = c("inf_rnd"="red",inf_ass="black"))+
-  labs(title=title,subtitle=subtitle,x="years",y="inf")+theme_bw()+
-  theme(legend.position = c(0.9,0.7),legend.background = element_blank(),
-        plot.title=element_text(size=8),
-        plot.subtitle = element_text(size = 8))
-
-# file name should be updated accordingly:
-
-ggsave(g1,file="inf_1000.pdf",width = 7,height = 3.5)
-
+if(scale==1){
+f1=ggplot(comp[comp$yr<=90,],aes(yr,inf))+geom_line(aes(colour="actual number"))+geom_line(aes(y=inf_ass,colour="assumed number"))+
+  scale_x_continuous(breaks=seq(0,90,10))+scale_colour_manual(name="",values = c("actual number"="red","assumed number"="black"))+
+  labs(title=title,subtitle=subtitle,x="times",y="Number of members in force")+theme_bw()+
+  theme(legend.position = c(0.8,0.9),legend.background = element_blank(),
+        plot.title=element_text(size=12),
+        plot.subtitle = element_text(size = 12))
+}else{
+f1=ggplot(comp[comp$yr<=90,],aes(yr,inf))+geom_line(aes(colour="actual number"))+geom_line(aes(y=inf_ass,colour="assumed number"))+
+  scale_x_continuous(breaks=seq(0,90,10))+scale_colour_manual(name="",values = c("actual number"="red","assumed number"="black"))+
+  labs(x="times",y="Number of members in force")+theme_bw()+
+  theme(legend.position = c(0.8,0.9),legend.background = element_blank())}
+f1
+ggsave(f1,file=paste("inf_",scale*10,".pdf",sep="",collapse = ""),width = 7,height = 3.5)
 
 #--------------------------------------plot of range-------------------------------
 
 #file paths should be updated accordingly:
 
-range_int=read.csv("C:\\F\\pension_projection\\FR_range_close_lowvar_dist_int_w cor.csv",header=T)
-range_total=read.csv("C:\\F\\pension_projection\\FR_range_close_lowvar_dist_total_w cor.csv",header=T)
-range_mort=read.csv("C:\\F\\pension_projection\\FR_range_close_lowvar_dist_mort_w cor.csv",header=T)
+range_int=read.csv("C:\\F\\pension_projection\\FR_range_open_dist_int_w cor.csv",header=T)
+range_total=read.csv("C:\\F\\pension_projection\\FR_range_open_dist_total_w cor.csv",header=T)
+range_mort=read.csv("C:\\F\\pension_projection\\FR_range_open_dist_mort_w cor.csv",header=T)
 range=cbind(range_int,range_mort[,2],range_total[,2])
 colnames(range)=c('yr','range_int','range_mort','range_total')
 range=as.data.frame(range)
-g1=ggplot(range[range$yr<=79,],aes(yr,range_int))+geom_line(aes(colour="random fund returns \nand deterministic mortality"),size=0.3)+geom_line(aes(y=range_total,colour="random fund returns \nand random mortality"),size=0.3)+
+g1=ggplot(range[range$yr<=max_yr,],aes(yr,range_int))+geom_line(aes(colour="random fund returns \nand deterministic mortality"),size=0.3)+geom_line(aes(y=range_total,colour="random fund returns \nand random mortality"),size=0.3)+
   geom_line(aes(y=range_mort,colour="deterministic fund returns \nand random mortality"),size=0.3)+
   scale_x_continuous(breaks=seq(0,90,10))+scale_colour_manual(name="",values = c("random fund returns \nand deterministic mortality"="red","random fund returns \nand random mortality"="black",
                                                                                  "deterministic fund returns \nand random mortality"="blue"))+
-  labs(x="years",y="Range of funded ratios from the 5th to the 95th percentile")+theme_bw()+
+  labs(x="times",y="Range of funded ratios from the 5th to the 95th percentile")+theme_bw()+
   theme(legend.background = element_blank(),
         plot.title=element_text(size=12),
         plot.subtitle = element_text(size = 12))+
   scale_y_continuous(breaks=seq(0,150,50),limits=c(0,150))
 
 g1
-ggsave(g1,pdfname("range"),width = 7,height = 5)
+ggsave(g1,file=pdfname("range"),width = 7,height = 5)
